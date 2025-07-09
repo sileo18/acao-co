@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:4.4 # Usa a imagem oficial mais recente do MongoDB
+    container_name: dev-mongodb # Nome amigável para seu contêiner
+    ports:
+      - "27017:27017" # Mapeia a porta 27017 do host para a porta 27017 do contêiner
+    environment:
+      # Você pode configurar variáveis de ambiente para usuário/senha aqui para produção,
+      # mas para desenvolvimento, geralmente não é necessário.
+      # - MONGO_INITDB_ROOT_USERNAME=admin
+      # - MONGO_INITDB_ROOT_PASSWORD=password
+      MONGO_INITDB_DATABASE: BaileFunkDB # Define um banco de dados inicial
+    volumes:
+      - mongodb_data:/data/db # Persiste os dados do MongoDB em um volume nomeado
+
+volumes:
+  mongodb_data: # Define o volume nomeado

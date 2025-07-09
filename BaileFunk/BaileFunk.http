@@ -1,0 +1,6 @@
+@BaileFunk_HostAddress = http://localhost:5079
+
+GET {{BaileFunk_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
