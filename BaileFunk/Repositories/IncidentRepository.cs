@@ -5,11 +5,11 @@ using MongoDB.Bson;
 
 namespace BaileFunk.Repositories;
 
-public class IncidentRepository
+public class IncidentRepository : IIncidentRepository
 {
     private readonly IMongoCollection<Incidents> _collection;
     
-    public IncidentRepository(MongoDbContext context)
+    IncidentRepository(MongoDbContext context)
     {
         _collection = context.Incidents;
     }

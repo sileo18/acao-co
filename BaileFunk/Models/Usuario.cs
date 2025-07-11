@@ -14,7 +14,7 @@ public class Usuario
     [BsonElement("pseudonym")]
     public string Pseudonym { get; set; }
     
-    [BsonIgnoreIfNull]
+    [BsonRequired]
     [BsonElement("username")]
     public string? Username { get; set; }
     
