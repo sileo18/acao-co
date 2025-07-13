@@ -12,6 +12,8 @@ public interface IIncidentRepository
 
     Task<List<Incidents>> GetNearAsync(double longitude, double latitude, double maxDistanceInMeters);
 
+    Task<Incidents?> GetActiveByPseudonymAsync(string pseudonym);
+
     Task<bool> DeleteAsync(string id);
 
 

@@ -21,7 +21,7 @@ public class Incidents
     [BsonRequired]
     [BsonElement("status")]
     [BsonRepresentation(BsonType.String)]
-    public StatusType Status { get; set; }
+    public StatusType Status { get; set; } = StatusType.Active;
     
     [BsonRequired]
     [BsonElement("description")]
@@ -31,11 +31,11 @@ public class Incidents
     [BsonElement("createdAt")]
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    
+
     [BsonElement("deactivatedAt")]
     [BsonIgnoreIfNull]
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-    public DateTime? DeactivatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? DeactivatedAt { get; set; } = null;
     
     [BsonIgnoreIfNull]
     [BsonElement("estimatedPeople")]

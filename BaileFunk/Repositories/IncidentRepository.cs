@@ -30,6 +30,9 @@ public class IncidentRepository : IIncidentRepository
 
     public async Task<Incidents> InsertAsync(Incidents incident)
     {
+        if (string.IsNullOrWhiteSpace(incident.Pseudonym) || incident.Location == null || string.IsNullOrWhiteSpace(incident.Description))
+            throw new ArgumentException("Dados do incidente inválidos.");
+        
         await _collection.InsertOneAsync(incident);
         return incident;
     }
@@ -67,5 +70,15 @@ public class IncidentRepository : IIncidentRepository
         }
         var result = await _collection.DeleteOneAsync(i => i.Id == objectId);
         return result.IsAcknowledged && result.DeletedCount > 0;
+    }
+    
+    public async Task<Incidents?> GetActiveByPseudonymAsync(string pseudonym)
+    {
+        var filter = Builders<Incidents>.Filter.And(
+            Builders<Incidents>.Filter.Eq(i => i.Pseudonym, pseudonym),
+            Builders<Incidents>.Filter.Eq(i => i.Status, StatusType.Active)
+        );
+
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 }

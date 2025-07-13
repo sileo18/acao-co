@@ -67,7 +67,14 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
+builder.Services.AddScoped<IIncidentService, IncidentService>();
 builder.Services.AddSingleton<PasswordService>();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
