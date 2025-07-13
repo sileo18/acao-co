@@ -33,6 +33,27 @@ public class UsuarioController : ControllerBase
         
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UsuarioResponseDTO>> GetByIdAsync(string id)
+    {
+
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            return BadRequest(new { message = "O paramêtro de busca 'id' não pode ser nulo" });
+        }
+        
+        var response = await _service.GetByIdAsync(id);
+
+        if (response == null)
+        {
+            return NotFound(new { message = $"Não foi encontrado nenhum usuário com o id {id}" });
+        }
+
+        UsuarioResponseDTO usuarioResponse = UsuarioMapper.ToResponseDTO(response);
+
+        return Ok(usuarioResponse);
+    }
+
     [HttpPost]
     public async Task<ActionResult<UsuarioResponseDTO>> InsertAsync([FromBody] UsuarioCreateDTO usuario)
     {
@@ -51,14 +72,12 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Policy = "VictimOnly")]
     public async Task<bool> DeleteAsync([FromQuery] string id)
     {
         var response = await _service.DeleteAsync(id);
 
         return response;
     }
-
-    
-    
     
 }
