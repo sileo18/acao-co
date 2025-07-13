@@ -9,7 +9,7 @@ public class IncidentRepository : IIncidentRepository
 {
     private readonly IMongoCollection<Incidents> _collection;
     
-    IncidentRepository(MongoDbContext context)
+    public IncidentRepository(MongoDbContext context)
     {
         _collection = context.Incidents;
     }

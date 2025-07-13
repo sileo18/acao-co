@@ -60,8 +60,8 @@ builder.Services
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
-    options.AddPolicy("VictimOnly", policy => policy.RequireRole("victim"));
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("ADMIN"));
+    options.AddPolicy("VictimOnly", policy => policy.RequireRole("VICTIM"));
 });
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
@@ -81,6 +81,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();
 

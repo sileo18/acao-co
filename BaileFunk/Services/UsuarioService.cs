@@ -1,4 +1,5 @@
 using BaileFunk.DTO_s;
+using BaileFunk.Mapper;
 using BaileFunk.Models;
 using BaileFunk.Repositories;
 
@@ -46,11 +47,28 @@ public class UsuarioService : IUsuarioService
         return usuario;
     }
 
-    public async Task<Usuario> InsertAsync(Usuario usuario)
+    public async Task<Usuario> InsertAsync(UsuarioCreateDTO usuario)
     {
-        usuario.Password = _passwordService.HashPassword(usuario.Password);
+        if (usuario.Roles.Contains("ADMIN"))
+        {
+            var adminExists = await _repository.GetByPseudonymOrUsernameAsync(usuario.Username);
         
-        return await _repository.InsertAsync(usuario);
+            if (adminExists != null)
+                throw new Exception("Username já está em uso.");
+        }
+        
+        var usuarioExists = await _repository.GetByPseudonymOrUsernameAsync(usuario.Pseudonym);
+        
+        if (usuarioExists != null)
+            throw new Exception("Pseudonym já está em uso.");
+        
+        usuario.Password = _passwordService.HashPassword(usuario.Password);
+
+        Usuario usuarioEntity = Mapper.UsuarioMapper.ToEntity(usuario);
+        
+        Usuario usuarioNovo = await _repository.InsertAsync(usuarioEntity);
+
+        return usuarioNovo;
     }
 
     public async Task<Usuario> AuthVictimOrAdminAsync(string username, string password)

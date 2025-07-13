@@ -14,7 +14,6 @@ public class Usuario
     [BsonElement("pseudonym")]
     public string Pseudonym { get; set; }
     
-    [BsonRequired]
     [BsonElement("username")]
     public string? Username { get; set; }
     
@@ -23,7 +22,8 @@ public class Usuario
     public string Password { get; set; }
 
     [BsonRequired]
-    public List<string> Roles = new List<string>();
+    [BsonElement("roles")]
+    public List<string> Roles { get; set; } = new List<string>() ;
     
     [BsonIgnoreIfNull]
     [BsonElement("createdAt")]

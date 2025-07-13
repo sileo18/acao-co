@@ -9,7 +9,7 @@ public class UsuarioRepository : IUsuarioRepository
 {
     private readonly IMongoCollection<Usuario> _collection;
 
-    UsuarioRepository(MongoDbContext context)
+    public UsuarioRepository(MongoDbContext context)
     {
         _collection = context.Usuario;
     }
@@ -17,8 +17,8 @@ public class UsuarioRepository : IUsuarioRepository
     public async Task<List<Usuario>> GetAllAsync(int skip, int pageSize)
     {
         return await _collection.Find(_ => true)
-            .Skip(skip)
-            .Limit(pageSize)
+          //  .Skip(skip)
+            //.Limit(pageSize)
             .ToListAsync();
     }
 

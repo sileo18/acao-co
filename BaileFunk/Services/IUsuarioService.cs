@@ -1,3 +1,4 @@
+using BaileFunk.DTO_s;
 using BaileFunk.Models;
 
 namespace BaileFunk.Services;
@@ -8,7 +9,7 @@ public interface IUsuarioService
 
     Task<Usuario?> GetByIdAsync(string id);
 
-    Task<Usuario> InsertAsync(Usuario usuario);
+    Task<Usuario> InsertAsync(UsuarioCreateDTO usuario);
 
     Task<Usuario> AuthVictimOrAdminAsync(string pseudonym, string password) ;
 
