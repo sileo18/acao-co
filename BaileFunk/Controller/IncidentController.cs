@@ -1,6 +1,7 @@
 using BaileFunk.DTO_s;
 using BaileFunk.Mapper;
 using BaileFunk.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BaileFunk.Controller;
@@ -17,6 +18,8 @@ public class IncidentController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "VictimOnly")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult<List<IncidentResponseDTO>>> GetAllAsync()
     {
         var incidents = await _service.GetAllAsync();
@@ -24,6 +27,7 @@ public class IncidentController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "VictimOnly")]
     public async Task<ActionResult<IncidentResponseDTO>> InsertAsync([FromBody] IncidentCreateDTO incident)
     {
         try

@@ -73,6 +73,7 @@ public class UsuarioController : ControllerBase
 
     [HttpDelete]
     [Authorize(Policy = "VictimOnly")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<bool> DeleteAsync([FromQuery] string id)
     {
         var response = await _service.DeleteAsync(id);
