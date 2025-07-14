@@ -90,4 +90,10 @@ public class IncidentController : ControllerBase
         var nearIncidents = await _service.GetNearAsync(location.Longitude, location.Latitude);
         return Ok(nearIncidents.Select(IncidentMapper.ToResponseDTO).ToList());
     }
+
+    [HttpDelete("{id}")]
+    public async Task<bool> DeleteAsync(string id)
+    {
+        return await _service.DeleteAsync(id);
+    }
 }

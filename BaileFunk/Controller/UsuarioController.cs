@@ -71,10 +71,10 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [Authorize(Policy = "VictimOnly")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<bool> DeleteAsync([FromQuery] string id)
+    public async Task<bool> DeleteAsync(string id)
     {
         var response = await _service.DeleteAsync(id);
 
