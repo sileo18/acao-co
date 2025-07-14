@@ -92,6 +92,8 @@ public class IncidentController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "VictimOnly")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<bool> DeleteAsync(string id)
     {
         return await _service.DeleteAsync(id);
