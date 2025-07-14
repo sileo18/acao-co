@@ -24,14 +24,47 @@ public class IncidentController : ControllerBase
     }
 
     [HttpPost]
-    [HttpPost]
     public async Task<ActionResult<IncidentResponseDTO>> InsertAsync([FromBody] IncidentCreateDTO incident)
     {
         try
         {
             var novoIncident = await _service.InsertAsync(incident);
             var response = IncidentMapper.ToResponseDTO(novoIncident);
-            return Created("daqui a pouco arrumo", response);
+            
+            if (string.IsNullOrWhiteSpace(response.Id))
+            {
+                return BadRequest("ID do incidente não pode ser nulo ou vazio.");
+            }
+            
+            return CreatedAtRoute("GetIncidentByIdAsync", new { id = response.Id }, response);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "Erro interno no servidor", detail = ex.Message });
+        }
+    }
+    
+    [HttpGet("{id}", Name = "GetIncidentByIdAsync")]
+    public async Task<ActionResult<IncidentResponseDTO>> GetIncidentByIdAsync(string id) 
+    {
+        try
+        {
+            var incident = await _service.GetByIdAsync(id);
+            
+            if (incident == null)
+            {
+                return NotFound("Incident não encontrado");
+            }
+            
+            return Ok(IncidentMapper.ToResponseDTO(incident));
         }
         catch (ArgumentException ex)
         {
@@ -47,7 +80,7 @@ public class IncidentController : ControllerBase
         }
     }
 
-    [HttpPost("near")]
+    [HttpGet("near")]
     public async Task<ActionResult<List<IncidentResponseDTO>>> GetNearAsync([FromBody] GeoLocationDTO location)
     {
         var nearIncidents = await _service.GetNearAsync(location.Longitude, location.Latitude);

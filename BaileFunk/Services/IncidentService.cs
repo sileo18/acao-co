@@ -2,6 +2,7 @@ using BaileFunk.DTO_s;
 using BaileFunk.Mapper;
 using BaileFunk.Models;
 using BaileFunk.Repositories;
+using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace BaileFunk.Services;
 
@@ -45,9 +46,27 @@ public class IncidentService : IIncidentService
         if (existingActiveIncident != null)
             throw new InvalidOperationException("O usuário já possui um incidente ativo.");
 
-        var incidentEntity = IncidentMapper.ToEntity(incident);
+        
+            var incidentNew = new Incidents
+            {
+                Pseudonym = incident.Pseudonym,
+                Description = incident.Description,
+                EstimatedPeople = incident.EstimatedPeople,
+                Infractions = incident.Infractions ?? new List<InfractionType>(),
+                PhotoUrls = incident.PhotoUrls ?? new List<string>(),
+                Status = StatusType.Active,
+                CreatedAt = DateTime.UtcNow,
 
-        return await _repository.InsertAsync(incidentEntity);
+                // ESSENCIAL: criar GeoJsonPoint para salvar corretamente no MongoDB
+                Location = new GeoJsonPoint<GeoJson2DCoordinates>(
+                    new GeoJson2DCoordinates(incident.Longitude, incident.Latitude)
+                )
+            };
+
+            await _repository.InsertAsync(incidentNew);
+            
+            return incidentNew;
+        
     }
 
     public async Task<bool> DeleteAsync(string id)

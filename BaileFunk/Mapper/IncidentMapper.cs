@@ -23,21 +23,21 @@ public class IncidentMapper
         };
     }
 
-    public static IncidentResponseDTO ToResponseDTO(Incidents entity)
+    public static IncidentResponseDTO ToResponseDTO(Incidents incident)
     {
         return new IncidentResponseDTO
         {
-            Id = entity.Id.ToString(),
-            Pseudonym = entity.Pseudonym,
-            Description = entity.Description,
-            EstimatedPeople = entity.EstimatedPeople,
-            Infractions = entity.Infractions,
-            PhotoUrls = entity.PhotoUrls,
-            Status = entity.Status,
-            Latitude = entity.Location.Coordinates.Y,
-            Longitude = entity.Location.Coordinates.X,
-            CreatedAt = entity.CreatedAt,
-            DeactivatedAt = entity.DeactivatedAt
+            Id = incident.Id.ToString(),
+            Pseudonym = incident.Pseudonym,
+            Longitude = incident.Location.Coordinates.X,
+            Latitude = incident.Location.Coordinates.Y,
+            Status = incident.Status,
+            Description = incident.Description,
+            CreatedAt = incident.CreatedAt,
+            DeactivatedAt = incident.DeactivatedAt,
+            EstimatedPeople = incident.EstimatedPeople,
+            Infractions = incident.Infractions,
+            PhotoUrls = incident.PhotoUrls
         };
     }
 }
